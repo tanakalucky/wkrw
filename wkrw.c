@@ -1,7 +1,8 @@
-# include <stdio.h>
-# include <ncurses.h>
-# include <string.h>
-# include <unistd.h>
+#include <stdio.h>
+#include <ncurses.h>
+#include <string.h>
+#include <unistd.h>
+#incluce <"wkrw.h">
 
 int main() 
 {
@@ -9,15 +10,15 @@ int main()
   char *str = "wkrw";
   int key;
 
-  /* ターミナル初期化 */
+  /* start control prompt*/
   initscr();
-  /* キーボード入力を非表示 */
+  /* hide keyboard inputs */
   noecho();
-  /* enter不要の入力モード */
+  /* accept keyboard input without enter */
   cbreak();
-  /* キー入力をまたない */
+  /* no wait keyboard input */
   timeout(0);
-  /* カーソル非表示 */
+  /* hide cursor */
   curs_set(0);
 
   getmaxyx(stdscr, h, w);
@@ -27,7 +28,7 @@ int main()
   while (1) {
     erase();
     move(y, x);
-    addstr(str);
+    addstr(ROW1);
     refresh();
 
     key = getch();
