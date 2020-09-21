@@ -2,7 +2,7 @@
 #include <ncurses.h>
 #include <string.h>
 #include <unistd.h>
-#incluce <"wkrw.h">
+#include "wkrw.h"
 
 int main() 
 {
