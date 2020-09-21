@@ -1,3 +1,5 @@
+#define WKRWLENGTH 68
+
 #define ROW1  "    #                 #                                #            "
 #define ROW2  "    #                 #              #########         #            "
 #define ROW3  "    #                 #      #             ##          #            "
