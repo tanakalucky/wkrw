@@ -9,9 +9,9 @@ int main()
   int x, y, w, h;
   int key;
 
-  /* start control prompt*/
+  /* start control screen*/
   initscr();
-  /* hide keyboard inputs */
+  /* hide keyboard input */
   noecho();
   /* accept keyboard input without enter */
   cbreak();
@@ -20,14 +20,12 @@ int main()
   /* hide cursor */
   curs_set(0);
 
-  /* get screem height and width */
+  /* get screen height and width */
   getmaxyx(stdscr, h, w);
   y = h/2;
   x = w - WKRWLENGTH;
   while (1) {
     erase();
-    /*move(y, x);*/
-    /*   addstr(ROW1);*/
     mvaddstr(y, x, ROW1);
     mvaddstr(y + 1, x, ROW2);
     mvaddstr(y + 2, x, ROW3);
