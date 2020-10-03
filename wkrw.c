@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <ncurses.h>
-#include <string.h>
 #include <unistd.h>
 #include "wkrw.h"
 
@@ -22,31 +21,28 @@ int main()
 
   /* get screen height and width */
   getmaxyx(stdscr, h, w);
-  y = h/2;
-  x = w - WKRWLENGTH;
+  y = (h - WKRWHEIGHT) /2;
+  x = w;
   while (1) {
     erase();
-    mvaddstr(y, x, ROW1);
-    mvaddstr(y + 1, x, ROW2);
-    mvaddstr(y + 2, x, ROW3);
-    mvaddstr(y + 3, x, ROW4);
-    mvaddstr(y + 4, x, ROW5);
-    mvaddstr(y + 5, x, ROW6);
-    mvaddstr(y + 6, x, ROW7);
-    mvaddstr(y + 7, x, ROW8);
-    mvaddstr(y + 8, x, ROW9);
-    mvaddstr(y + 9, x, ROW10);
-    mvaddstr(y + 10, x, ROW11);
-    mvaddstr(y + 11, x, ROW12);
-    mvaddstr(y + 12, x, ROW13);
-    mvaddstr(y + 13, x, ROW14);
-    mvaddstr(y + 14, x, ROW15);
+    static char *wkrw[WKRWHEIGHT]
+        = {ROW1, ROW2, ROW3, ROW4, ROW5, ROW6, ROW7, ROW8, ROW9, ROW10, ROW11, ROW12, ROW13, ROW14, ROW15};
+
+    for (int i = 0; i < WKRWHEIGHT; ++i) {
+	for (int j = 0; j < WKRWLENGTH; ++j) {
+	    if (x + j < w) {
+		    mvaddch(y + i, x + j, wkrw[i][j]);
+	    }
+	}	
+    }
+
     refresh();
 
     key = getch();
     if (key == 'q') break;
 
-    x--; if (x <= 0) x = w - WKRWLENGTH;
+    x--;
+    if (x <= - WKRWLENGTH) x = w;
 
     usleep(100000);
   }
