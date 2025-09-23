@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+use std::{io::Write, thread, time::Duration};
 
 const WKRW: [&str; 15] = [
     r#"    #                 #                                #            "#,
@@ -58,7 +58,7 @@ fn main() {
         }
 
         // 出力をフラッシュして確実に表示
-        std::io::Write::flush(&mut std::io::stdout()).unwrap();
+        Write::flush(&mut std::io::stdout()).unwrap();
 
         thread::sleep(Duration::from_micros(FRAME_DELAY));
     }
@@ -68,5 +68,5 @@ fn main() {
     print!("\x1B[?47l"); // メイン画面バッファに戻る
     print!("\x1B[?25h"); // カーソルを再表示
     println!(); // 新しい行に移動
-    std::io::Write::flush(&mut std::io::stdout()).unwrap();
+    Write::flush(&mut std::io::stdout()).unwrap();
 }
