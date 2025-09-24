@@ -9,28 +9,60 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            bin_ext: ""
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            bin_ext: ""
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            bin_ext: ""
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bin_ext: ".exe"
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: Build
-        run: cargo build --release
+        run: cargo build --release --target ${{ matrix.target }}
 
       - name: Package
         run: |
           mkdir dist
-          cp target/release/wkrw dist/
+          cp target/${{ matrix.target }}/release/wkrw${{ matrix.bin_ext }} dist/
           cd dist
-          tar czf wkrw-${GITHUB_REF_NAME}-x86_64-unknown-linux-gnu.tar.gz wkrw
+          tar czf wkrw-${{ github.ref_name }}-${{ matrix.target }}.tar.gz wkrw${{ matrix.bin_ext }}
 
-      - name: Create GitHub Release
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: artifacts/**/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
